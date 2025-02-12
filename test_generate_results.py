@@ -13,7 +13,6 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 @allure.id("484711")
 @pytest.fixture(scope="module")
 def setup_environment():
-    """Фикстура для подготовки окружения."""
     print("Setting up the test environment.")
     yield
     print("Tearing down the test environment.")
@@ -24,7 +23,6 @@ def setup_environment():
     ("input3", "output3"),
 ])
 def test_generate_result_files(setup_environment, test_input, expected_output):
-    """Генерирует файлы с результатами теста."""
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 
     # Генерация JSON результата
