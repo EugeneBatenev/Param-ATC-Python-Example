@@ -36,12 +36,6 @@ jobs:
         sudo add-apt-repository universe -y
         sudo add-apt-repository multiverse -y
         sudo apt-get update -y
-        sudo apt-get install -y \
-          libasound2-plugins \
-          libicu72 \
-          libffi8 \
-          libx264-164 \
-          libjavascriptcoregtk-4.1-0 || true
 
     - name: Install framework dependencies
       run: |
