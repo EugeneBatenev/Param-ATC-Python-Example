@@ -1,0 +1,58 @@
+name: Run tests
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      ALLURE_JOB_RUN_ID:
+        description: ALLURE_JOB_RUN_ID service parameter. Leave blank.
+      ALLURE_USERNAME:
+        description: ALLURE_USERNAME service parameter. Leave blank.
+
+env:
+  ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+  ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
+  ALLURE_ENDPOINT: https://demo.testops.cloud/
+  ALLURE_PROJECT_ID: 1
+  ALLURE_RESULTS: allure-results
+  
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Update package lists
+      run: sudo apt-get update -y
+
+    - name: Install missing dependencies
+      run: |
+        sudo add-apt-repository universe -y
+        sudo add-apt-repository multiverse -y
+        sudo apt-get update -y
+        sudo apt-get install -y \
+          libasound2-plugins \
+          libicu72 \
+          libffi8 \
+          libx264-164 \
+          libjavascriptcoregtk-4.1-0 || true
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install allure-pytest
+
+    - name: Download and install allurectl
+      run: |
+        wget https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -O ./allurectl
+        chmod +x ./allurectl
+
+    - name: Run tests with Allure
+      run: ./allurectl watch -- pytest --alluredir=${{ env.ALLURE_RESULTS }}
