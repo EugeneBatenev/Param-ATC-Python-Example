@@ -1,7 +1,6 @@
 name: Run tests
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       ALLURE_JOB_RUN_ID:
