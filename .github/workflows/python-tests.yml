@@ -41,10 +41,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install allure-pytest
 
-    - name: Download and install allurectl
-      run: |
-        wget https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -O ./allurectl
-        chmod +x ./allurectl
+    - name: Install and configure allurectl using GH Action
+      uses: allure-framework/setup-allurectl@v1
+      with:
+        allure-endpoint: $ALLURE_ENDPOINT
+        allure-token: ${{ secrets.ALLURE_TOKEN }}
+        allure-project-id: $ALLURE_PROJECT_ID
 
     - name: Run tests with Allure
       run: ./allurectl watch -- pytest --alluredir=${{ env.ALLURE_RESULTS }} --clean-alluredir
