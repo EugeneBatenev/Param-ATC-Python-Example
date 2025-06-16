@@ -14,6 +14,7 @@ env:
   ALLURE_ENDPOINT: https://testing.testops.cloud/
   ALLURE_PROJECT_ID: 11844
   ALLURE_RESULTS: allure-results
+  ALLURE_LAUNCH_TAGS: SomeTag
   
 jobs:
   test:
