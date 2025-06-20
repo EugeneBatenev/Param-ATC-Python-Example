@@ -50,3 +50,23 @@ jobs:
 
     - name: Run tests with Allure
       run: allurectl watch -- pytest --alluredir=${{ env.ALLURE_RESULTS }} --clean-alluredir
+
+    - name: Archive Allure attachments
+      if: ${{ always() }}            # сохраняем даже при упавших тестах
+      run: |
+        ATTACH_DIR="${{ env.ALLURE_RESULTS }}/attachments"
+        if [ -d "$ATTACH_DIR" ]; then
+          ARCHIVE="allure-attachments-${{ github.run_id }}.tar.gz"
+          tar -czf "$ARCHIVE" -C "$ATTACH_DIR" .
+          echo "Created $ARCHIVE"
+        else
+          echo "::warning::No attachments folder found at $ATTACH_DIR"
+        fi
+
+    - name: Upload attachments archive
+      if: ${{ always() && hashFiles('allure-attachments-*') != '' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-attachments-${{ github.run_id }}
+        path: allure-attachments-${{ github.run_id }}.tar.gz
+        retention-days: 1
