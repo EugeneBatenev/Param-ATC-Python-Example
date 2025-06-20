@@ -55,6 +55,6 @@ jobs:
       if: ${{ always() }}             
       uses: actions/upload-artifact@v4
       with:
-        name: allure-attachments-${{ github.run_id }}
+        name: allure-results-${{ github.run_id }}
         path: ${{ env.ALLURE_RESULTS }}   
         retention-days: 1
