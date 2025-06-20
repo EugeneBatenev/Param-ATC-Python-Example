@@ -54,7 +54,7 @@ jobs:
     - name: Archive Allure attachments
       if: ${{ always() }}            # сохраняем даже при упавших тестах
       run: |
-        ATTACH_DIR="${{ env.ALLURE_RESULTS }}/attachments"
+        ATTACH_DIR="${{ env.ALLURE_RESULTS }}"
         if [ -d "$ATTACH_DIR" ]; then
           ARCHIVE="allure-attachments-${{ github.run_id }}.tar.gz"
           tar -czf "$ARCHIVE" -C "$ATTACH_DIR" .
