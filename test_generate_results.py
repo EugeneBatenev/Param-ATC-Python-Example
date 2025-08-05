@@ -22,7 +22,7 @@ def setup_environment():
     ("input2", "output2"),
     ("input3", "output"),
 ])
-@allure.label("jira","BPDND-1")
+@allure.label("jira", "BPDND-1")
 def test_generate_result_files(setup_environment, test_input, expected_output):
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 
@@ -49,6 +49,7 @@ def test_generate_result_files(setup_environment, test_input, expected_output):
     # Проверка, что файлы созданы
     assert os.path.exists(json_file_path)
     assert os.path.exists(text_file_path)
+
 
 
 
