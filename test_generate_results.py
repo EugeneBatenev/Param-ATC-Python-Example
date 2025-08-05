@@ -11,7 +11,7 @@ RESULTS_DIR = "allure-results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 @allure.id("484711")
-@allure.lable("Jira", "BPDND-1")
+@allure.label("Jira", "BPDND-1")
 @pytest.fixture(scope="module")
 def setup_environment():
     print("Setting up the test environment.")
@@ -49,6 +49,7 @@ def test_generate_result_files(setup_environment, test_input, expected_output):
     # Проверка, что файлы созданы
     assert os.path.exists(json_file_path)
     assert os.path.exists(text_file_path)
+
 
 
 
