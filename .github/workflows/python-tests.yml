@@ -12,7 +12,7 @@ env:
   ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
   ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
   ALLURE_ENDPOINT: https://testing.testops.cloud/
-  ALLURE_PROJECT_ID: 11844
+  ALLURE_PROJECT_ID: 11779
   ALLURE_RESULTS: allure-results
   
 jobs:
