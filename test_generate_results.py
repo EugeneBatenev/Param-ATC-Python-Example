@@ -10,7 +10,7 @@ from allure_commons.types import Severity
 RESULTS_DIR = "allure-results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-@allure.id("484711")
+#@allure.id("484711")
 
 @pytest.fixture(scope="module")
 def setup_environment():
@@ -50,6 +50,7 @@ def test_generate_result_files(setup_environment, test_input, expected_output):
     # Проверка, что файлы созданы
     assert os.path.exists(json_file_path)
     assert os.path.exists(text_file_path)
+
 
 
 
