@@ -53,6 +53,6 @@ jobs:
       run: |
        echo "ALLURE_JOB_RUN_ID: ${{ env.ALLURE_JOB_RUN_ID }}"
        
-       allurectl watch -- pytest --job-run-uid=${{ env.ALLURE_JOB_RUN_ID }} --alluredir=${{ env.ALLURE_RESULTS }} --clean-alluredir
+       allurectl watch --job-run-id $ALLURE_JOB_RUN_ID -- pytest --alluredir=${{ env.ALLURE_RESULTS }} --clean-alluredir
       env:
         ALLURE_JOB_RUN_ID: ${{ env.ALLURE_JOB_RUN_ID }}
