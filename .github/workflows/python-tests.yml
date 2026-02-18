@@ -51,8 +51,8 @@ jobs:
 
     - name: Run tests with Allure
       run: |
-       export ALLURE_JOB_RUN_ID: ${{ env.ALLURE_JOB_RUN_ID }}
        echo "ALLURE_JOB_RUN_ID: ${{ env.ALLURE_JOB_RUN_ID }}"
-       allurectl watch -- pytest --alluredir=${{ env.ALLURE_RESULTS }} --clean-alluredir
+       
+       allurectl watch -- pytest --job-run-uid=${{ env.ALLURE_JOB_RUN_ID }} --alluredir=${{ env.ALLURE_RESULTS }} --clean-alluredir
       env:
         ALLURE_JOB_RUN_ID: ${{ env.ALLURE_JOB_RUN_ID }}
