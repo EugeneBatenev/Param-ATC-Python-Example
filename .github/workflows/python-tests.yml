@@ -50,5 +50,5 @@ jobs:
         allure-project-id: ${{ env.ALLURE_PROJECT_ID }}
 
     - name: Run tests with Allure
-      run: allurectl watch -- pytest --alluredir=${{ env.ALLURE_RESULTS }} --clean-alluredir --launch-id 209501
+      run: allurectl watch --launch-id 209501 -- pytest --alluredir=${{ env.ALLURE_RESULTS }} --clean-alluredir
         
