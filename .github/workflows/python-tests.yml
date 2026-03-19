@@ -52,7 +52,7 @@ jobs:
     - name: Run tests with Allure
       run: |
         allurectl watch -- pytest --alluredir=${{ env.ALLURE_RESULTS }} --clean-alluredir
-        ./allurectl launch add-issue --current-launch --integration-id 4121 --issue-keys AE-3
+        allurectl launch add-issue --current-launch --integration-id 4121 --issue-keys AE-3
       
    
     - name: Save TR as files
