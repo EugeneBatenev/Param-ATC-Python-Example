@@ -5,8 +5,19 @@ on:
     inputs:
       ALLURE_JOB_RUN_ID:
         description: ALLURE_JOB_RUN_ID service parameter. Leave blank.
+        required: false
       ALLURE_USERNAME:
         description: ALLURE_USERNAME service parameter. Leave blank.
+        required: false
+      TEST_NIPPLE:
+        description: Big nipple.
+        required: false
+        default: ''
+        type: choice
+        options:
+        - Big nipple
+        - Small nipple
+        - ugly nipple
 
 env:
   ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
