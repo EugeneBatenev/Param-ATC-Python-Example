@@ -29,6 +29,7 @@ jobs:
       - name: Run pytest in Docker container and upload to Allure TestOps
         run: |
           export ALLURE_CI_ENV="$(cat .allure-context/ALLURE_CI_ENV)"
+          printenv | grep ALLURE_
           docker run --rm \
             -e ALLURE_CI_ENV \
             -v "${{ github.workspace }}:/work" \
