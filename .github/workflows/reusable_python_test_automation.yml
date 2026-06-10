@@ -1,4 +1,4 @@
-name: execute-python-test-automation
+name: run test in a docker
 
 on:
   workflow_call:

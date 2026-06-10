@@ -1,4 +1,4 @@
-name: regression-test-campaigns-validation
+name: initial launch
 
 on:
   workflow_dispatch:
