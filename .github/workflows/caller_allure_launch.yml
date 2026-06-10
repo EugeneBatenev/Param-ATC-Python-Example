@@ -20,11 +20,10 @@ jobs:
   prepare-allure-context:
     name: prepare Allure pipeline context
     runs-on: ubuntu-latest
-    outputs:
-      ALLURE_CI_ENV: ${{ steps.allure-context.outputs.ALLURE_CI_ENV }}
     env:
       ALLURE_ENDPOINT: https://testing.testops.cloud/
       ALLURE_PROJECT_ID: "11844"
+      ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
       ALLURE_RESULTS: allure-results
       ALLURE_LAUNCH_NAME: Python reference launch
       ALLURE_LAUNCH_TAGS: python,pytest,reference
@@ -54,13 +53,19 @@ jobs:
         env:
           ALLURE_JOB_UID: ${{ steps.allure-job-uid.outputs.result }}
         run: |
-          echo "ALLURE_CI_ENV=$(./allurectl ci env --encode)" >> "$GITHUB_OUTPUT"
+          mkdir -p .allure-context
+          ./allurectl ci env --encode > .allure-context/ALLURE_CI_ENV
+
+      - name: Upload Allure pipeline context
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-ci-env
+          path: .allure-context/ALLURE_CI_ENV
+          retention-days: 1
 
   execute-functional-test:
     name: execute functional test
     needs: prepare-allure-context
     uses: ./.github/workflows/reusable_python_test_automation.yml
-    with:
-      ALLURE_CI_ENV: ${{ needs.prepare-allure-context.outputs.ALLURE_CI_ENV }}
     secrets:
       ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}

@@ -2,10 +2,6 @@ name: run test in a docker
 
 on:
   workflow_call:
-    inputs:
-      ALLURE_CI_ENV:
-        required: true
-        type: string
     secrets:
       ALLURE_TOKEN:
         required: true
@@ -24,14 +20,17 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
+      - name: Download Allure pipeline context
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-ci-env
+          path: .allure-context
+
       - name: Run pytest in Docker container and upload to Allure TestOps
-        env:
-          ALLURE_CI_ENV: ${{ inputs.ALLURE_CI_ENV }}
-          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
         run: |
+          export ALLURE_CI_ENV="$(cat .allure-context/ALLURE_CI_ENV)"
           docker run --rm \
             -e ALLURE_CI_ENV \
-            -e ALLURE_TOKEN \
             -v "${{ github.workspace }}:/work" \
             -w /work \
             python:3.12 \
