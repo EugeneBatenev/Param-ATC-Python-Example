@@ -73,7 +73,7 @@ jobs:
             -v "${{ github.workspace }}:/work" \
             -w /work \
             python:3.12 \
-            bash -lc 'python -m pip install --upgrade pip && python -m pip install pytest allure-pytest && ./allurectl watch -- pytest test_generate_results.py --alluredir="${ALLURE_RESULTS}" --clean-alluredir --capture=no'
+            bash -lc 'python -m pip install --upgrade pip && python -m pip install pytest allure-pytest && ./allurectl watch -- pytest test_generate_results.py --alluredir="${ALLURE_RESULTS}" --clean-alluredir
 
       - name: Upload allure results artifact
         if: ${{ always() }}
