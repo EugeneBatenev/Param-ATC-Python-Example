@@ -55,6 +55,7 @@ jobs:
         run: |
           mkdir -p .allure-context
           ./allurectl ci env --encode > .allure-context/ALLURE_CI_ENV
+          ./allurectl ci env
 
       - name: Upload Allure pipeline context
         uses: actions/upload-artifact@v4
