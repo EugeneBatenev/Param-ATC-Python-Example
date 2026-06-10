@@ -10,10 +10,29 @@ on:
         description: "ALLURE_USERNAME service parameter. Leave blank"
         required: false
 
-steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
+run-name: "${{ github.workflow }}-${{ github.run_number }}"
 
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare-allure-context:
+    name: prepare Allure pipeline context
+    runs-on: ubuntu-latest
+    outputs:
+      ALLURE_CI_ENV: ${{ steps.allure-context.outputs.ALLURE_CI_ENV }}
+    env:
+      ALLURE_ENDPOINT: https://testing.testops.cloud/
+      ALLURE_PROJECT_ID: "11844"
+      ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+      ALLURE_RESULTS: allure-results
+      ALLURE_LAUNCH_NAME: Python reference launch
+      ALLURE_LAUNCH_TAGS: python,pytest,reference
+      ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
+      ALLURE_USERNAME: ${{ github.event.inputs.ALLURE_USERNAME }}
+
+    steps:
       - uses: actions/github-script@v4
         id: allure-job-uid
         with:
@@ -36,16 +55,13 @@ steps:
         env:
           ALLURE_JOB_UID: ${{ steps.allure-job-uid.outputs.result }}
         run: |
-          echo "ALLURE_CI_ENV=$(./allurectl ci env --encode)" >> "$GITHUB_ENV"
+          echo "ALLURE_CI_ENV=$(./allurectl ci env --encode)" >> "$GITHUB_OUTPUT"
 
-run-name: "${{ github.workflow }}-${{ github.run_number }}"
-
-jobs:
   execute-functional-test:
     name: execute functional test
+    needs: prepare-allure-context
     uses: ./.github/workflows/reusable_python_test_automation.yml
     with:
-      ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
-      ALLURE_USERNAME: ${{ github.event.inputs.ALLURE_USERNAME }}
+      ALLURE_CI_ENV: ${{ needs.prepare-allure-context.outputs.ALLURE_CI_ENV }}
     secrets:
       ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}

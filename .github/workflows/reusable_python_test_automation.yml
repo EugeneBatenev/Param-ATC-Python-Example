@@ -3,14 +3,9 @@ name: execute-python-test-automation
 on:
   workflow_call:
     inputs:
-      ALLURE_JOB_RUN_ID:
-        required: false
+      ALLURE_CI_ENV:
+        required: true
         type: string
-        default: ""
-      ALLURE_USERNAME:
-        required: false
-        type: string
-        default: ""
     secrets:
       ALLURE_TOKEN:
         required: true
@@ -23,62 +18,29 @@ jobs:
       run:
         shell: bash
     env:
-      ALLURE_ENDPOINT: https://testing.testops.cloud/
-      ALLURE_PROJECT_ID: "11844"
-      ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
       ALLURE_RESULTS: allure-results
-      ALLURE_LAUNCH_NAME: Python reference launch
-      ALLURE_LAUNCH_TAGS: python,pytest,reference
-      ALLURE_JOB_RUN_ID: ${{ inputs.ALLURE_JOB_RUN_ID }}
-      ALLURE_USERNAME: ${{ inputs.ALLURE_USERNAME }}
 
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - uses: actions/github-script@v4
-        id: allure-job-uid
-        with:
-          result-encoding: string
-          script: |
-            const result = await github.actions.getWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.runId,
-            });
-            return `${context.repo.owner}/${context.repo.repo}/actions/workflows/${result.data.workflow_id}`
-
-      - name: Download and make allurectl executable
-        run: |
-          wget https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -O ./allurectl
-          chmod +x ./allurectl
-
-      - name: Pack Allure pipeline context
-        id: allure-context
-        env:
-          ALLURE_JOB_UID: ${{ steps.allure-job-uid.outputs.result }}
-        run: |
-          echo "ALLURE_CI_ENV=$(./allurectl ci env --encode)" >> "$GITHUB_ENV"
-
       - name: Run pytest in Docker container and upload to Allure TestOps
+        env:
+          ALLURE_CI_ENV: ${{ inputs.ALLURE_CI_ENV }}
+          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
         run: |
           docker run --rm \
             -e ALLURE_CI_ENV \
-            -e ALLURE_ENDPOINT \
-            -e ALLURE_PROJECT_ID \
             -e ALLURE_TOKEN \
-            -e ALLURE_RESULTS \
-            -e ALLURE_LAUNCH_NAME \
-            -e ALLURE_LAUNCH_TAGS \
             -v "${{ github.workspace }}:/work" \
             -w /work \
             python:3.12 \
-            bash -lc 'python -m pip install --upgrade pip && python -m pip install pytest allure-pytest && ./allurectl watch -- pytest test_generate_results.py --alluredir="${ALLURE_RESULTS}" --clean-alluredir --capture=no'
+            bash -lc 'wget https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -O ./allurectl && chmod +x ./allurectl && python -m pip install --upgrade pip && python -m pip install pytest allure-pytest && ./allurectl watch -- pytest test_generate_results.py --alluredir=allure-results --clean-alluredir --capture=no'
 
       - name: Upload allure results artifact
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: allure-results-${{ github.run_id }}
-          path: ${{ env.ALLURE_RESULTS }}
+          path: allure-results
           retention-days: 1
