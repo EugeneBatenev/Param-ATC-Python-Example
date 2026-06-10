@@ -35,6 +35,11 @@ jobs:
             -v "${{ github.workspace }}:/work" \
             -w /work \
             python:3.12 \
+            echo "\n" \
+            echo "\n" \
+            printenv | grep ALLURE_ \
+            echo "\n" \
+            echo "\n" \
             bash -lc 'wget https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -O ./allurectl && chmod +x ./allurectl && python -m pip install --upgrade pip && python -m pip install pytest allure-pytest && ./allurectl watch -- pytest test_generate_results.py --alluredir=allure-results --clean-alluredir --capture=no'
 
       - name: Upload allure results artifact
