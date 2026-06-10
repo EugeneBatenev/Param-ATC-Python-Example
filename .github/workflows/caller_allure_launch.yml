@@ -25,7 +25,6 @@ jobs:
     env:
       ALLURE_ENDPOINT: https://testing.testops.cloud/
       ALLURE_PROJECT_ID: "11844"
-      ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
       ALLURE_RESULTS: allure-results
       ALLURE_LAUNCH_NAME: Python reference launch
       ALLURE_LAUNCH_TAGS: python,pytest,reference
