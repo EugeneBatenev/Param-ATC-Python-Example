@@ -17,6 +17,8 @@ jobs:
       ALLURE_RESULTS: allure-results
       ALLURE_JOB_RUN_ID: << pipeline.parameters.ALLURE_JOB_RUN_ID >>
       ALLURE_USERNAME: << pipeline.parameters.ALLURE_USERNAME >>
+      ALLURE_ENDPOINT: https://testing.testops.cloud/
+      ALLURE_PROJECT_ID: 15129
     steps:
       - checkout
       - run:
@@ -24,13 +26,10 @@ jobs:
           command: python -m pip install --upgrade pip pytest allure-pytest
       - run:
           name: Download allurectl
-          command: curl -fsSL https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -o allurectl && chmod +x allurectl
+          command: curl -fsSL https://github.com/cheshi-mantu/allurectl-local-builds/releases/download/2.21.0/allurectl_linux_amd64 -o allurectl && chmod +x allurectl
       - run:
           name: Run tests and upload results to Allure TestOps
           command: |
-            : "${ALLURE_ENDPOINT:?Set ALLURE_ENDPOINT in CircleCI project environment variables}"
-            : "${ALLURE_PROJECT_ID:?Set ALLURE_PROJECT_ID in CircleCI project environment variables}"
-            : "${ALLURE_TOKEN:?Set ALLURE_TOKEN in CircleCI project environment variables}"
             ./allurectl watch -- python -m pytest --alluredir "$ALLURE_RESULTS" --clean-alluredir
 
 workflows:
