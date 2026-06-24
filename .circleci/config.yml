@@ -26,7 +26,7 @@ jobs:
           command: python -m pip install --upgrade pip pytest allure-pytest
       - run:
           name: Download allurectl
-          command: curl -fsSL https://github.com/cheshi-mantu/allurectl-local-builds/releases/download/2.21.0/allurectl_linux_amd64 -o allurectl && chmod +x allurectl
+          command: curl -fsSL https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -o allurectl && chmod +x allurectl
       - run:
           name: Run tests and upload results to Allure TestOps
           command: |
