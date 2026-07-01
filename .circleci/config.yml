@@ -18,7 +18,7 @@ jobs:
       ALLURE_JOB_RUN_ID: << pipeline.parameters.ALLURE_JOB_RUN_ID >>
       ALLURE_USERNAME: << pipeline.parameters.ALLURE_USERNAME >>
       ALLURE_ENDPOINT: https://testing.testops.cloud/
-      ALLURE_PROJECT_ID: 15129
+      ALLURE_PROJECT_ID: 15128
     steps:
       - checkout
       - run:
