@@ -57,7 +57,7 @@ def generate_mock_result(test_name, test_input, expected_output):
 
 
 def maybe_fail():
-    if random.random() < 0.10:
+    if random.random() < 0.25:
         pytest.fail("Random mock failure for Allure Report testing")
 
 
