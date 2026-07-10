@@ -61,7 +61,7 @@ def maybe_fail():
         pytest.fail("Random mock failure for Allure Report testing")
 
 
-@allure.label("jira", "BPDND-1")
+@allure.label("jira", "AE-57")
 def test_generate_user_result(setup_environment):
     generate_mock_result("test_generate_user_result", "user_input", "user_output")
     maybe_fail()
